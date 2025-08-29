@@ -1,4 +1,9 @@
 package com.guincho.repository;
 
-public interface ClienteRepository {
+import com.guincho.entities.Cliente;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    Cliente findByPlacaVeiculo(String placaVeiculo);
+    Cliente findByFoneCelular(Integer foneCelular);
 }
