@@ -10,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +29,7 @@ public class ClienteController {
     private ClienteRepository clienteRepository;
 
     @PostMapping("/criar")
-    public ResponseEntity entradaVeiculo(@RequestBody Cliente cliente) {
+    public ResponseEntity criarChamado(@RequestBody Cliente cliente) {
 
         try {
             Cliente novoCliente = clienteService.create(cliente);
@@ -43,7 +45,7 @@ public class ClienteController {
     }
 
     @DeleteMapping("/deletar")
-    public ResponseEntity deletarVeiculo(@RequestBody Cliente cliente) {
+    public ResponseEntity deletarChamado(@RequestBody Cliente cliente) {
         try {
             Cliente deletarCliente = clienteService.delete(cliente.getId());
             return ResponseEntity.ok(deletarCliente);
@@ -52,5 +54,16 @@ public class ClienteController {
         }
     }
 
+    @PutMapping("/editar/{id}")
+    public ResponseEntity atualizarChamado(@PathVariable Long id, @RequestBody Cliente cliente) {
+     try {
+         Cliente atualizarCliente = clienteService.update(id, cliente);
+         return ResponseEntity.ok(atualizarCliente);
+     }catch (IllegalArgumentException e) {
+         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+     }catch (RuntimeException e) {
+         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+     }
+    }
 
 }

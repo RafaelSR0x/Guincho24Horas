@@ -25,7 +25,7 @@ public class ClienteService {
             throw new IllegalArgumentException("Dados já cadastrados");
         }
 
-        return clienteRepository.save((cliente));
+        return clienteRepository.save(cliente);
     }
 
     //Listar todos os chamados
@@ -45,7 +45,36 @@ public class ClienteService {
     }
 
     //Atualizar o chamado já existente
-    public Cliente update(Cliente cliente) {
+    public Cliente update(Long id, Cliente clienteAtualizado) {
+        //Buscar o usuario pelo id, no caso vai verificar se ele existe no banco de dados
 
+
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+        // 2. Verificar duplicidade da placa
+        var clientePorPlaca = clienteRepository.findByPlacaVeiculo(clienteAtualizado.getPlacaVeiculo());
+        if (clientePorPlaca != null && !clientePorPlaca.getId().equals(id)) {
+            throw new IllegalArgumentException("Placa já cadastrada para outro cliente");
+        }
+
+        // 3. Verificar duplicidade do telefone
+        var clientePorFone = clienteRepository.findByFoneCelular(clienteAtualizado.getFoneCelular());
+        if (clientePorFone != null && !clientePorFone.getId().equals(id)) {
+            throw new IllegalArgumentException("Telefone já cadastrado para outro cliente");
+        }
+
+        cliente.setPlacaVeiculo(clienteAtualizado.getPlacaVeiculo());
+        cliente.setNomeCliente(clienteAtualizado.getNomeCliente());
+        cliente.setFoneCelular(clienteAtualizado.getFoneCelular());
+
+        return clienteRepository.save(cliente);
+
+        /*var clientPlacaVeiculo = clienteRepository.findByPlacaVeiculo(clienteAtualizado.getPlacaVeiculo());
+        var clientFoneCelular = clienteRepository.findByFoneCelular(clienteAtualizado.getFoneCelular());
+
+        if (clientPlacaVeiculo !=null || clientFoneCelular !=null) {
+            throw new IllegalArgumentException("Dados já cadastrados");
+        }*/
     }
 }
