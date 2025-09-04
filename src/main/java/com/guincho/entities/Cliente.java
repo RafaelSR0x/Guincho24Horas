@@ -14,9 +14,11 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String placaVeiculo;
     private String nomeCliente;
+
     @Column(unique = true)
     private Integer foneCelular;
     private String endereco;
