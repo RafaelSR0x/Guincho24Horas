@@ -19,9 +19,8 @@ public class ClienteService {
     @Transactional
     public Cliente create(Cliente cliente) {
         var clientPlacaVeiculo = clienteRepository.findByPlacaVeiculo(cliente.getPlacaVeiculo());
-        var clientFoneCelular = clienteRepository.findByFoneCelular(cliente.getFoneCelular());
 
-        if (clientPlacaVeiculo !=null || clientFoneCelular !=null) {
+        if (clientPlacaVeiculo !=null) {
             throw new IllegalArgumentException("Dados já cadastrados");
         }
 
@@ -56,12 +55,6 @@ public class ClienteService {
         var clientePorPlaca = clienteRepository.findByPlacaVeiculo(clienteAtualizado.getPlacaVeiculo());
         if (clientePorPlaca != null && !clientePorPlaca.getId().equals(id)) {
             throw new IllegalArgumentException("Placa já cadastrada para outro cliente");
-        }
-
-        // 3. Verificar duplicidade do telefone
-        var clientePorFone = clienteRepository.findByFoneCelular(clienteAtualizado.getFoneCelular());
-        if (clientePorFone != null && !clientePorFone.getId().equals(id)) {
-            throw new IllegalArgumentException("Telefone já cadastrado para outro cliente");
         }
 
         cliente.setPlacaVeiculo(clienteAtualizado.getPlacaVeiculo());

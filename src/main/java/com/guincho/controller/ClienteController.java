@@ -25,8 +25,6 @@ public class ClienteController {
 
     @Autowired
     private ClienteService clienteService;
-    @Autowired
-    private ClienteRepository clienteRepository;
 
     @PostMapping("/criar")
     public ResponseEntity criarChamado(@RequestBody Cliente cliente) {
